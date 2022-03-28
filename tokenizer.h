@@ -1,7 +1,7 @@
 /**
  * Header file for the tokenizer project
- * @author your_name
- * @version date
+ * @author Gabriel Rodriguez
+ * @version 1.0
  */
 /* Constants */
 #define LINE 100
@@ -23,7 +23,7 @@
 #define NOT_OP "NOT_OP"
 #define SEMI_COLON "SEMI_COLON"
 /**
-* add comment
+* Declaring function prototypes
 */
 void get_token(char);
 void get_chars(char);
