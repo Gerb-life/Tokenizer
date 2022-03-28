@@ -19,8 +19,10 @@ char *line;             // Global pointer to line of input
 
 // (optional) can declare some additional variable if you want to
 char token[TSIZE];
+char* token_category[TSIZE];
 int count = 0;
 int ind = 0;
+int tok_num = 0;
 int statement = 1;
 /**
 * add comment
@@ -53,9 +55,8 @@ int main(int argc, char* argv[]) {
    // (optional) can add some code here if you want some here
   while (fgets(input_line, LINE, in_file) != NULL){
         line = input_line;  // Sets a global pointer to the memory location
-
-
-     for(int i = 0 ; i < strlen(line); i++){
+	
+	for(int i = 0 ; i < strlen(line); i++){
                 if(isspace(line[i])){
 
                 }
@@ -75,6 +76,7 @@ int main(int argc, char* argv[]) {
 
    for(int i = 0  ; i < strlen(token); i++){
         get_token(token[i]);
+        print_output(out_file);
    }
 
    fclose(in_file);
@@ -85,84 +87,98 @@ int main(int argc, char* argv[]) {
 
 void get_chars(char c){
         token[ind] = c;
-        //printf("%c" , token[ind]);
+        printf("%c" , token[ind]);
         ind++;
+}
+
+void print_output(FILE *out){
+        if(count == 0 ){
+                fprintf(out , "Statement  # %d \n" , statement);
+        }
+        if(token[count] == ';'){
+                fprintf(out , "Lexeme %d is %c and is a %s \n" , count , token[count] , token_category[count]);
+                fprintf(out , "-------------------------- \n");
+                statement++;
+                count = 0;
+        }
+        else{
+                fprintf(out , "Lexeme %d is %c and is a %s \n" , count , token[count] , token_category[count]);
+                count++;
+        }
 }
 /**
 *
 */
 void get_token(char token_ptr){
         // token_ptr is the token at index i;
-        if(count == 0 ){
-                printf("Statement # %d \n" , statement);
-        }
+
 
         switch (token_ptr){
 
 
                 case '0'... '9':
-                           printf("Lexeme %d is %c \n" ,count ,  token_ptr);
-                           count++;
+                           token_category[tok_num] = INT_LITERAL;
+                           tok_num++;
                            break;
 
                 case '(':
-                           printf("Lexeme %d is %c \n", count , token_ptr);
-                           count++;
+                           token_category[tok_num] = LEFT_PAREN;
+                           tok_num++;
                            break;
 
                 case ')':
-                           printf("Lexeme %d is %c \n", count , token_ptr);
-                           count++;
+                           token_category[tok_num] = RIGHT_PAREN;
+                           tok_num++;
                            break;
                 case '+':
-                           printf("Lexeme %d is %c \n", count , token_ptr);
-                           count++;
+                           token_category[tok_num] = ADD_OP;
+                           tok_num++;
                            break;
 
                 case '-':
-                           printf("Lexeme %d is %c \n", count , token_ptr);
-                           count++;
+                           token_category[tok_num] = SUB_OP;
+                           tok_num++;
                            break;
 
                 case '*':
-                           printf("Lexeme %d is %c \n", count , token_ptr);
-                           count++;
+                           token_category[tok_num] = MULT_OP;
+                           tok_num++;
                            break;
 
                 case '/':
-                           printf("Lexeme %d is %c \n", count , token_ptr);
-                           count++;
+                           token_category[tok_num] = DIV_OP;
+                           tok_num++;
                            break;
 
                 case '^':
-                           printf("Lexeme %d is %c \n", count , token_ptr);
-                           count++;
+                           token_category[tok_num] = EXPON_OP;
+                           tok_num++;
                            break;
-                case '=':
-                           printf("Lexeme %d is %c \n", count , token_ptr);
-                           count++;
+		case '=':
+                           token_category[tok_num] = ASSIGN_OP;
+                           tok_num++;
                            break;
 
                 case '<':
-                           printf("Lexeme %d is %c \n", count , token_ptr);
-                           count++;
+                           token_category[tok_num] = LESS_THAN_OP;
+                           tok_num++;
                            break;
                 case '>':
-                           printf("Lexeme %d is %c \n", count , token_ptr);
-                           count++;
+                           token_category[tok_num] = GREATER_THAN_OP;
+                           tok_num++;
                            break;
- 		case '!':
-                           printf("Lexeme %d is %c \n", count , token_ptr);
-                           count++;
+                case '!':
+                           token_category[tok_num] = NOT_OP;
+                           tok_num++;
                            break;
                 case ';':
-                           printf("Lexeme %d is %c \n", count , token_ptr);
-                           count = 0;
-                           statement++;
-                           printf("---------------------------- \n");
+                           token_category[tok_num] = SEMI_COLON;
+                           tok_num++;
                            break;
                 default:
-                           printf("Lexical error %c is not a lexeme \n" , token_ptr);
+                           token_category[tok_num] = "ERROR NOT LEXEME";
+                           tok_num++;
                            break;
         }
 }
+
